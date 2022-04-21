@@ -1,0 +1,71 @@
+service: serverless-template
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-domain-manager
+  - serverless-offline
+  - serverless-dynamodb-local
+
+package:
+  patterns:
+    - "!node_modules/aws-sdk/**"
+    - "!src/**/*.spec.*"
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: us-east-1
+  deploymentBucket:
+    name: deployments.bryansuralta
+    blockPublicAccess: true
+
+  profile: serverless-template
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - dynamodb:*
+          Resource: "*"
+
+custom:
+  customDomain:
+    http:
+      domainName: api.template.bryansuralta.com
+      endpointType: "regional"
+  dynamodb:
+    stages:
+      - test
+    start:
+      inMemory: true
+      migrate: true
+
+functions:
+  base:
+    handler: src/handlers/base.getHandler
+    events:
+      - httpApi: "GET /"
+  findUserHandler:
+    handler: src/handlers/user.findUserHandler
+    events:
+      - httpApi: "POST /findUserHandler"
+
+resources:
+  Resources:
+    usersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: serverless-template-dynamodb
+        AttributeDefinitions:
+          - AttributeName: user
+            AttributeType: S
+          - AttributeName: email
+            AttributeType: S
+        KeySchema:
+          - AttributeName: user
+            KeyType: HASH
+          - AttributeName: email
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
