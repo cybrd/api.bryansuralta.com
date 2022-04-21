@@ -12,7 +12,7 @@ type findByUserParam = {
 };
 export const findByUser = (params: findByUserParam) => {
   const command = new QueryCommand({
-    TableName: "serverless-template-dynamodb",
+    TableName: "bryansuralta-draft",
     KeyConditionExpression: "#user = :user",
     ExpressionAttributeValues: {
       ":user": params.user,
@@ -30,7 +30,7 @@ type findByEmailParam = {
 };
 export const findByEmail = (params: findByEmailParam) => {
   const command = new ScanCommand({
-    TableName: "serverless-template-dynamodb",
+    TableName: "bryansuralta-draft",
     FilterExpression: "email = :email",
     ExpressionAttributeValues: {
       ":email": params.email,
@@ -47,7 +47,7 @@ type insertParam = {
 };
 export const insert = (item: insertParam) => {
   const command = new PutItemCommand({
-    TableName: "serverless-template-dynamodb",
+    TableName: "bryansuralta-draft",
     Item: item,
   });
 

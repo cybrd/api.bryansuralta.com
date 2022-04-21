@@ -1,4 +1,4 @@
-service: serverless-template
+service: api-bryansuralta
 
 plugins:
   - serverless-plugin-typescript
@@ -19,11 +19,11 @@ provider:
     name: deployments.bryansuralta
     blockPublicAccess: true
 
-  profile: serverless-template
+  profile: api-bryansuralta
   iam:
     role:
       statements:
-        - Effect: "Allow"
+        - Effect: Allow
           Action:
             - dynamodb:*
           Resource: "*"
@@ -31,8 +31,8 @@ provider:
 custom:
   customDomain:
     http:
-      domainName: api.template.bryansuralta.com
-      endpointType: "regional"
+      domainName: api.bryansuralta.com
+      endpointType: regional
   dynamodb:
     stages:
       - test
@@ -48,14 +48,14 @@ functions:
   findUserHandler:
     handler: src/handlers/user.findUserHandler
     events:
-      - httpApi: "POST /findUserHandler"
+      - httpApi: "POST /findUser"
 
 resources:
   Resources:
     usersTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: serverless-template-dynamodb
+        TableName: bryansuralta-draft
         AttributeDefinitions:
           - AttributeName: user
             AttributeType: S
