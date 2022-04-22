@@ -28,6 +28,9 @@ provider:
             - dynamodb:*
           Resource: "*"
 
+  httpApi:
+    cors: true
+
 custom:
   customDomain:
     http:
@@ -45,17 +48,21 @@ functions:
     handler: src/handlers/base.getHandler
     events:
       - httpApi: "GET /"
-  findUserHandler:
-    handler: src/handlers/user.findUserHandler
+  userFindHandler:
+    handler: src/handlers/user.findHandler
     events:
-      - httpApi: "POST /findUser"
+      - httpApi: "POST /user/find"
+  draftInsertHandler:
+    handler: src/handlers/draft.insertHandler
+    events:
+      - httpApi: "POST /draft/insert"
 
 resources:
   Resources:
     usersTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: bryansuralta-draft
+        TableName: bryansuralta-users
         AttributeDefinitions:
           - AttributeName: user
             AttributeType: S
@@ -66,6 +73,19 @@ resources:
             KeyType: HASH
           - AttributeName: email
             KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    draftsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: bryansuralta-drafts
+        AttributeDefinitions:
+          - AttributeName: user
+            AttributeType: S
+        KeySchema:
+          - AttributeName: user
+            KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1

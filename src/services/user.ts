@@ -6,13 +6,15 @@ import {
 } from "@aws-sdk/client-dynamodb";
 import { ddbClient } from "../config";
 
+const TableName = "bryansuralta-users";
+
 type findByUserParam = {
   user: AttributeValue;
   [key: string]: AttributeValue;
 };
 export const findByUser = (params: findByUserParam) => {
   const command = new QueryCommand({
-    TableName: "bryansuralta-draft",
+    TableName,
     KeyConditionExpression: "#user = :user",
     ExpressionAttributeValues: {
       ":user": params.user,
@@ -30,7 +32,7 @@ type findByEmailParam = {
 };
 export const findByEmail = (params: findByEmailParam) => {
   const command = new ScanCommand({
-    TableName: "bryansuralta-draft",
+    TableName,
     FilterExpression: "email = :email",
     ExpressionAttributeValues: {
       ":email": params.email,
@@ -47,7 +49,7 @@ type insertParam = {
 };
 export const insert = (item: insertParam) => {
   const command = new PutItemCommand({
-    TableName: "bryansuralta-draft",
+    TableName,
     Item: item,
   });
 

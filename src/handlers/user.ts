@@ -1,7 +1,7 @@
 import { Handler } from "aws-lambda";
 import { findByUser, findByEmail } from "../services/user";
 
-export const findUserHandler: Handler = async (event) => {
+export const findHandler: Handler = async (event) => {
   if (event.body) {
     const body = JSON.parse(event.body);
 
