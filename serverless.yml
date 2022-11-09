@@ -26,6 +26,7 @@ provider:
         - Effect: Allow
           Action:
             - dynamodb:*
+            - s3:*
           Resource: "*"
 
   httpApi:
@@ -56,6 +57,10 @@ functions:
     handler: src/handlers/draft.insertHandler
     events:
       - httpApi: "POST /draft/insert"
+  resume:
+    handler: src/handlers/s3.cv
+    events:
+      - httpApi: "GET /s3/cv"
 
 resources:
   Resources:
